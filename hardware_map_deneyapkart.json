@@ -1,0 +1,43 @@
+{
+    "ARDUINO_UNO": {
+        "pins": {"0": {"digital": true, "analog": false}, "A0": {"digital": true, "analog": true}},
+        "pwm": [3, 5, 6, 9, 10, 11], "interrupts": [2, 3],
+        "memory": {"ram": 2048, "flash": 32768}, "libraries": ["Arduino.h", "Servo.h"], "timers": [0, 1, 2]
+    },
+    "ESP32": {
+        "pins": {"0": {"digital": true, "analog": true}, "32": {"digital": true, "analog": true}},
+        "pwm": [0, 2, 4, 5, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 25],
+        "interrupts": [0, 2, 4, 5, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 25, 26, 27, 32, 33],
+        "memory": {"ram": 520192, "flash": 4194304}, "libraries": ["WiFi.h", "HTTPClient.h", "ESP32Servo.h", "Ticker.h", "driver/ledc.h"], "timers": [0, 1, 2, 3]
+    },
+    "DENEYAP_KART": {
+        "pins": {
+            "0": {"digital": true, "analog": false}, "1": {"digital": true, "analog": false},
+            "2": {"digital": true, "analog": true}, "3": {"digital": true, "analog": true},
+            "4": {"digital": true, "analog": true}, "5": {"digital": true, "analog": true},
+            "6": {"digital": true, "analog": true}, "7": {"digital": true, "analog": true},
+            "8": {"digital": true, "analog": true}, "9": {"digital": true, "analog": true},
+            "10": {"digital": true, "analog": true}, "11": {"digital": true, "analog": true},
+            "12": {"digital": true, "analog": true}, "13": {"digital": true, "analog": true},
+            "14": {"digital": true, "analog": true}, "15": {"digital": true, "analog": true},
+            "16": {"digital": true, "analog": true}, "17": {"digital": true, "analog": true},
+            "18": {"digital": true, "analog": true}, "19": {"digital": true, "analog": true},
+            "20": {"digital": true, "analog": true}, "21": {"digital": true, "analog": true},
+            "22": {"digital": true, "analog": true}, "23": {"digital": true, "analog": true},
+            "A0": {"digital": true, "analog": true}, "A1": {"digital": true, "analog": true}
+            // Bu pinler Deneyap Kart'ın gerçek pin düzenine göre doğrulanmalıdır.
+        },
+        "pwm": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], // Deneyap'ın PWM pinleri
+        "interrupts": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], // Tüm dijital pinler
+        "memory": {"ram": 520192, "flash": 4194304}, // Genellikle ESP32 ile aynı
+        "libraries": [
+            "Arduino.h",
+            "Deneyap_Servo.h", // Deneyap'ın kendi servo kütüphanesi
+            "WiFi.h",
+            "HTTPClient.h",
+            "Ticker.h",
+            "driver/ledc.h" // LEDC API için
+        ],
+        "timers": [0, 1, 2, 3] // ESP32 ile aynı donanımsal zamanlayıcılar
+    }
+}
