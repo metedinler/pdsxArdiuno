@@ -1,0 +1,18 @@
+{
+    "ARDUINO_UNO": {
+        "pins": {"0": {"digital": true, "analog": false}, "A0": {"digital": true, "analog": true}},
+        "pwm": [3, 5, 6, 9, 10, 11], "interrupts": [2, 3],
+        "memory": {"ram": 2048, "flash": 32768}, "libraries": ["Arduino.h", "Servo.h"], "timers": [0, 1, 2]
+    },
+    "ESP32": {
+        "pins": {"0": {"digital": true, "analog": true}, "32": {"digital": true, "analog": true}},
+        "pwm": [0, 2, 4, 5, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 25],
+        "interrupts": [0, 2, 4, 5, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 25, 26, 27, 32, 33],
+        "memory": {"ram": 520192, "flash": 4194304}, "libraries": ["WiFi.h", "HTTPClient.h", "ESP32Servo.h", "Ticker.h", "driver/ledc.h"], "timers": [0, 1, 2, 3]
+    },
+    "DENEYAP_KART": {
+        "pins": {"0": {"digital": true, "analog": false}, "A0": {"digital": true, "analog": true}},
+        "pwm": [0, 1, 2, 3, 4, 5], "interrupts": [0, 1, 2, 3],
+        "memory": {"ram": 520192, "flash": 4194304}, "libraries": ["Deneyap_Servo.h"], "timers": [0, 1]
+    }
+}
