@@ -1,0 +1,75 @@
+Yorumlayıcı Modu (--mode interpret)
+
+Komut: python argeparse_main.py test_basic_vars.pdsx --mode interpret
+
+Beklenen Konsol Çıktısı:
+
+INFO: PDSX kodu okundu: test_basic_vars.pdsx
+INFO: Tokenizasyon tamamlandı. Toplam token: XX
+INFO: AST ayrıştırma tamamlandı. Üst düzey deyim: XX
+INFO: Mod: Interpret (PDSX kodu doğrudan yorumlanıyor)
+INFO: Interpreter: Simüle edilmiş setup() başlıyor...
+INFO: Interpreter: Simüle edilmiş setup() bitti.
+INFO: Interpreter: Simüle edilmiş loop() başlıyor (Ctrl+C ile durdurun)...
+PDSX Log: String: Merhaba PDSX!
+PDSX Log: Integer: 123
+PDSX Log: Double: 45.67
+PDSX Log: Boolean: True
+PDSX Log: Integer (++): 124
+PDSX Log: Double (-=): 35.67
+PDSX Log: Another Int (*=): 15
+PDSX Log: Boolean NOT: False
+(Loop mesajı tekrar eder, Ctrl+C ile durdurulur)
+
+Çevirici Modu (--mode transpile)
+
+Komut: python argeparse_main.py test_basic_vars.pdsx --mode transpile -o test_basic_vars.cpp
+
+test_basic_vars.cpp İçeriği Beklentisi (Önemli Kısımlar):
+
+C++
+
+// ... includes ve özel fonksiyonlar ...
+
+String myString;
+int myInt;
+double myDouble;
+bool myBool;
+int anotherInt; // DIM anotherInt AS INTEGER = 5 de buraya gelir
+
+void setup() {
+  Serial.begin(9600); // Default serial communication
+  myString = "Merhaba PDSX!";
+  myInt = 123;
+  myDouble = 45.67;
+  myBool = true;
+  anotherInt = 5; // Başlangıç değeri setup'ta atanır
+}
+
+void loop() {
+  Serial.print("String: ");
+  Serial.println(myString);
+  Serial.print("Integer: ");
+  Serial.println(myInt);
+  Serial.print("Double: ");
+  Serial.println(myDouble);
+  Serial.print("Boolean: ");
+  Serial.println(myBool);
+
+  myInt++; // ++ operatörü
+  myDouble -= 10.0; // -= operatörü
+
+  Serial.print("Integer (++): ");
+  Serial.println(myInt);
+  Serial.print("Double (-=): ");
+  Serial.println(myDouble);
+
+  anotherInt = (anotherInt * 3); // *= operatörü ikili işlem ve atamaya çevrilir
+
+  Serial.print("Another Int (*=): ");
+  Serial.println(anotherInt);
+
+  Serial.print("Boolean NOT: ");
+  Serial.println(!(myBool)); // NOT operatörü
+  // ... sonsuz döngü devam eder, Ctrl+C ile durdurulur ...
+}
