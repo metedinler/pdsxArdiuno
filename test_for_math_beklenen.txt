@@ -1,0 +1,98 @@
+Yorumlayıcı Modu (--mode interpret)
+
+Komut: python argeparse_main.py test_for_math.pdsx --mode interpret
+
+Beklenen Konsol Çıktısı:
+
+INFO: ...
+PDSX Log: FOR Döngüsü ve Matematik Testi
+PDSX Log: Loop i: 1
+PDSX Log: SQRT(i): 1.0
+PDSX Log: SIN(90): 1.0
+PDSX Log: COS(0): 1.0
+PDSX Log: POW(i, 2): 1.0
+PDSX Log: NROOT(8, 3): 2.0
+PDSX Log: ROUND(piVal): 3
+PDSX Log: Loop i: 2
+PDSX Log: SQRT(i): 1.414...
+PDSX Log: SIN(90): 1.0
+PDSX Log: COS(0): 1.0
+PDSX Log: POW(i, 2): 4.0
+PDSX Log: NROOT(8, 3): 2.0
+PDSX Log: ROUND(piVal): 3
+PDSX Log: Loop i: 3
+PDSX Log: SQRT(i): 1.732...
+PDSX Log: SIN(90): 1.0
+PDSX Log: COS(0): 1.0
+PDSX Log: POW(i, 2): 9.0
+PDSX Log: NROOT(8, 3): 2.0
+PDSX Log: ROUND(piVal): 3
+PDSX Log: Mean: 25.0
+PDSX Log: Median: 25.0
+Çevirici Modu (--mode transpile)
+
+Komut: python argeparse_main.py test_for_math.pdsx --mode transpile -o test_for_math.cpp
+
+test_for_math.cpp İçeriği Beklentisi:
+
+C++
+
+// ... includes ve özel fonksiyonlar ...
+double piVal;
+int i;
+std::vector<double> values;
+
+void setup() {
+  Serial.begin(9600);
+  piVal = 3.14159265;
+  // Dizilerin başlangıç değerleri veya boyutu burada ayarlanabilir.
+  // PDSX'in DIM myArray AS ARRAY syntax'ı C++'ta std::vector olarak boş başlatılır.
+  // SET values[index] komutu çalıştıkça boyut büyür.
+}
+
+void loop() {
+  Serial.print("FOR Döngüsü ve Matematik Testi");
+  Serial.println("");
+
+  for (int i = 1; i <= 3; i += 1) {
+    Serial.print("Loop i: ");
+    Serial.println(i);
+    Serial.print("SQRT(i): ");
+    Serial.println(sqrt(i));
+    Serial.print("SIN(90): ");
+    Serial.println(sin(DEG_TO_RAD(90)));
+    Serial.print("COS(0): ");
+    Serial.println(cos(DEG_TO_RAD(0)));
+    Serial.print("POW(i, 2): ");
+    Serial.println(pow(i, 2));
+    Serial.print("NROOT(8, 3): ");
+    Serial.println(pow(8, 1.0 / 3)); // NROOT çevirisi
+    Serial.print("ROUND(piVal): ");
+    Serial.println(round(piVal));
+  }
+
+  // Dizinin elemanlarına atama
+  // std::vector'da boyut dinamiktir, bu yüzden set komutları direkt push_back veya [] ile atanır
+  // Ancak Parser, myArray[index] = value'yu Identifier olarak işlediği için,
+  // burada muhtemelen `values[0] = 10.0;` gibi bir çıktı göreceksin.
+  // std::vector'ın boyutunu dinamik olarak yönetmek için öncesinde resize veya push_back gerekir.
+  // Şu anki transpilerda `values[0] = 10.0;` komutu `values[0] = 10.0;` olarak çevrilir
+  // ancak eğer vector boyutu yeterli değilse C++'ta çalışma zamanı hatası verir.
+  // Bunun için Interpreter'daki gibi otomatik boyutlandırma logic'i Transpiler'a da eklenmeli.
+  values.resize(4); // Bu satır manuel olarak eklendi, transpiler bunu otomatik yapmalı (gelecek geliştirme)
+  values[0] = 10.0;
+  values[1] = 20.0;
+  values[2] = 30.0;
+  values[3] = 40.0;
+
+  Serial.print("Mean: ");
+  Serial.println(mean(values));
+  Serial.print("Median: ");
+  Serial.println(median(values));
+  // ...
+}
+Not: std::vector için dizi ataması (SET values[0] = 10.0) doğru çalışması için values.resize(4); 
+gibi bir ön boyutlandırma veya her atamada push_back gibi 
+metotlar kullanılması gerekir. Mevcut Transpiler bu karmaşıklığı tam olarak ele almıyor, 
+Interpreter Python listelerinin esnekliği sayesinde bunu otomatik yapıyor.
+ Bu, ileriki bir geliştirmede Transpiler'a eklenebilecek önemli bir özelliktir.
