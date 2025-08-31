@@ -1,0 +1,34 @@
+argeparse_main.py
+hardware_map.json
+hardware_map_deneyapkart.json
+hata ayiklama.txt
+pdsX_kod_kullanma_klavuzu.md
+pdsx_interpreter.py
+pdsx_lexer.py
+pdsx_parser.py
+pdsx_transpiler.py
+program_nasil_calisiyor.md
+test_basic_var_beklenen cikti.txt
+test_cpp/test_basic_vars.cpp
+test_cpp/test_basic_vars_beklenen.cpp
+test_cpp/test_collections.cpp
+test_cpp/test_for_math.cpp
+test_cpp/test_hardware_control.cpp
+test_cpp/test_hardware_control_beklenen.cpp
+test_cpp/test_if_logic._beklenen.cpp
+test_cpp/test_simple.cpp
+test_cpp/test_size_simple.cpp
+test_for_math_beklenen.txt
+test_hardware_control_beklenen.txt
+test_if_logic_beklenen cikti.txt
+test_pdsx/blink.pdsx
+test_pdsx/test_basic_vars.pdsx
+test_pdsx/test_collections.pdsx
+test_pdsx/test_error_demo.pdsx
+test_pdsx/test_for_math.pdsx
+test_pdsx/test_hardware_control.pdsx
+test_pdsx/test_if_logic.pdsx
+test_pdsx/test_simple.pdsx
+test_pdsx/test_size_advanced.pdsx
+test_pdsx/test_size_simple.pdsx
+test_pdsx/test_size_support.pdsx
