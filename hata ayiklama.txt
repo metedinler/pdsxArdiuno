@@ -1,0 +1,52 @@
+Hata Ayıklama ve İyileştirmeler
+Bu testleri çalıştırdıkça, muhtemelen bazı hatalarla karşılaşacaksın. 
+Dikkat etmen gerekenler ve olası hata türleri:
+
+SyntaxError (Sözdizimi Hatası): Eğer Lexer veya Parser 
+bir PDSX kodunu anlayamazsa bu hatayı fırlatır. 
+Hata mesajındaki satır ve sütun bilgisi, pdsx_lexer.py ve pdsx_parser.py 
+dosyalarında yaptığımız geliştirmeler sayesinde doğru yere işaret etmeli. Örneğin:
+
+SyntaxError: Beklenmeyen Karakter '!' (Satır:5, Sütun:10)
+veya
+
+SyntaxError: Beklenmeyen token: Token(IDENTIFIER, 'someVar', Line:7, Col:3). Beklenen OPERATOR ('=')
+Bu hatalar, PDSX kodunuzda bir yazım yanlışı veya dil kurallarına uymayan bir ifade olduğu anlamına gelir.
+
+RuntimeError (Çalışma Zamanı Hatası): Interpreter modunda kod çalışırken 
+bir mantık hatası veya desteklenmeyen bir işlemle karşılaşılırsa bu hata oluşabilir. Örneğin:
+
+Sıfıra bölme.
+
+Diziye indeks dışı erişim (Python listesi otomatik büyüdüğü için 
+bu daha az görünür olabilir, ancak C++'ta kritik bir hata olur).
+
+Tanımlanmamış bir değişkene erişim.
+
+Desteklenmeyen bir tip üzerinde işlem yapma.
+
+Transpiler Çıktısı Kontrolü: transpile modunda hata almasan bile, 
+üretilen .cpp dosyasını manuel olarak kontrol et.
+
+Değişken tanımlamaları doğru mu?
+
+Fonksiyon çağrıları doğru mu?
+
+Mantıksal/bitwise operatörler C++'a doğru çevrilmiş mi?
+
+Donanım komutları Arduino/ESP32 API'sine uygun mu?
+
+setup() ve loop() içinde beklediğin komutlar var mı?
+
+Özellikle dikkat etmen gereken noktalar:
+
+Diziler ve Koleksiyonlar: SET values[0] = 10.0 gibi dizi atamalarının std::vector'da 
+otomatik olarak boyutu büyütmesini Transpiler'a eklemek bir sonraki adım olabilir. 
+Şu an için, C++ tarafında myVector.resize(size); gibi manuel bir boyutlandırma gerekebilir.
+
+GOTO ve GOSUB: Interpreter'da GOTO sadece loglanıyor, gerçek atlama yapmıyor. 
+Transpiler goto komutuna çeviriyor. Bu Basic benzeri atlama komutlarını daha 
+derinlemesine simüle etmek veya C++ için etiket yönetimini iyileştirmek daha karmaşık bir iş olacaktır.
+
+Hata Yakalama (TRY/CATCH): THROW komutunun RuntimeError fırlatması ve 
+TRY/CATCH bloklarının bunu yakalaması, çalışma zamanı hata yönetiminin temelini oluşturur.
