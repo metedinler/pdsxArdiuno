@@ -1,0 +1,63 @@
+Yorumlayıcı Modu (--mode interpret)
+
+Komut: python argeparse_main.py test_if_logic.pdsx --mode interpret
+
+Beklenen Konsol Çıktısı:
+
+INFO: ...
+PDSX Log: x y'den büyüktür.
+PDSX Log: x 5'ten büyük VE y 10'dan küçüktür.
+PDSX Log: x 10'a eşit VEYA y 1'e eşittir.
+PDSX Log: NOT (x == 10) sonucu: False
+PDSX Log: NAND(x==10, y==5) sonucu: False
+PDSX Log: XOR(x==10, y==10) sonucu: False
+Çevirici Modu (--mode transpile)
+
+Komut: python argeparse_main.py test_if_logic.pdsx --mode transpile -o test_if_logic.cpp
+
+test_if_logic.cpp İçeriği Beklentisi:
+
+C++
+
+// ...
+int x;
+int y;
+bool resultBool;
+
+void setup() {
+  Serial.begin(9600);
+  x = 10;
+  y = 5;
+}
+
+void loop() {
+  if ((x > y)) {
+    Serial.print("x y'den büyüktür.");
+    Serial.println(""); // Yeni satır
+  } else {
+    Serial.print("x y'den küçük veya eşittir.");
+    Serial.println("");
+  }
+
+  if (((x > 5) && (y < 10))) {
+    Serial.print("x 5'ten büyük VE y 10'dan küçüktür.");
+    Serial.println("");
+  }
+
+  if (((x == 10) || (y == 1))) {
+    Serial.print("x 10'a eşit VEYA y 1'e eşittir.");
+    Serial.println("");
+  }
+
+  resultBool = (!(x == 10)); // NOT çevirisi
+  Serial.print("NOT (x == 10) sonucu: ");
+  Serial.println(resultBool);
+
+  resultBool = (!((x == 10) && (y == 5))); // NAND çevirisi
+  Serial.print("NAND(x==10, y==5) sonucu: ");
+  Serial.println(resultBool);
+
+  resultBool = (((x == 10) != (y == 10))); // XOR çevirisi
+  Serial.print("XOR(x==10, y==10) sonucu: ");
+  Serial.println(resultBool);
+}
