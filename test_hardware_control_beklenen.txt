@@ -1,0 +1,141 @@
+Yorumlayıcı Modu (--mode interpret)
+
+Komut: python argeparse_main.py test_hardware_control.pdsx --mode interpret
+
+Beklenen Konsol Çıktısı:
+
+INFO: ...
+INFO: Interpreter: Simüle edilmiş setup() başlıyor...
+INFO: Simülasyon: Pin 13 OUTPUT olarak yapılandırıldı.
+INFO: Simülasyon: Servo 'myServo' (9 pininde) tanımlandı.
+INFO: Simülasyon: Buzzer (8 pininde) tanımlandı.
+INFO: Interpreter: Simüle edilmiş setup() bitti.
+INFO: Interpreter: Simüle edilmiş loop() başlıyor (Ctrl+C ile durdurun)...
+PDSX Log: Donanım Kontrol Testi Başladı.
+Simülasyon: Pin 13 değeri 1 olarak ayarlandı (HIGH=1, LOW=0).
+Simülasyon: 200 ms gecikme.
+Simülasyon: Pin 13 değeri 0 olarak ayarlandı (HIGH=1, LOW=0).
+Simülasyon: 200 ms gecikme.
+Simülasyon: Servo 'myServo' 0 derecesine hareket ettirildi.
+Simülasyon: 1000 ms gecikme.
+Simülasyon: Servo 'myServo' 180 derecesine hareket ettirildi.
+Simülasyon: 1000 ms gecikme.
+Simülasyon: Servo 'myServo' 90 derecesine hareket ettirildi.
+Simülasyon: Buzzer (8 pininde) ON frekans: 1000Hz.
+Simülasyon: 500 ms gecikme.
+Simülasyon: Buzzer (8 pininde) OFF frekans: 0Hz.
+Simülasyon: Zamanlayıcı 1 ayarlandı (Aralık: 500ms, Sayım: 3, Event: toggleLed).
+PDSX Log: Test Bitti.
+INFO: Interpreter: Zamanlayıcı 1 etkinleşti, Event 'toggleLed' çağrılıyor.
+Simülasyon: Pin 13 değeri 1 olarak ayarlandı (HIGH=1, LOW=0).
+Simülasyon: 200 ms gecikme.
+Simülasyon: Pin 13 değeri 0 olarak ayarlandı (HIGH=1, LOW=0).
+Simülasyon: 200 ms gecikme.
+INFO: Interpreter: Zamanlayıcı 1 etkinleşti, Event 'toggleLed' çağrılıyor.
+Simülasyon: Pin 13 değeri 1 olarak ayarlandı (HIGH=1, LOW=0).
+Simülasyon: 200 ms gecikme.
+Simülasyon: Pin 13 değeri 0 olarak ayarlandı (HIGH=1, LOW=0).
+Simülasyon: 200 ms gecikme.
+INFO: Interpreter: Zamanlayıcı 1 etkinleşti, Event 'toggleLed' çağrılıyor.
+Simülasyon: Pin 13 değeri 1 olarak ayarlandı (HIGH=1, LOW=0).
+Simülasyon: 200 ms gecikme.
+Simülasyon: Pin 13 değeri 0 olarak ayarlandı (HIGH=1, LOW=0).
+Simülasyon: 200 ms gecikme.
+INFO: Interpreter: Zamanlayıcı 1 sayımı bitti.
+(Loop mesajı tekrar eder, Ctrl+C ile durdurulur)
+
+Çevirici Modu (--mode transpile)
+
+Komut: python argeparse_main.py test_hardware_control.pdsx --mode transpile -o test_hardware_control.cpp
+
+test_hardware_control.cpp İçeriği Beklentisi:
+
+C++
+
+#include <Arduino.h>
+#include <string>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <numeric>
+#include <cmath>
+#include <algorithm>
+#include <Servo.h> // Define Servo komutu ile eklenmeli
+
+// PDSX Matematiksel ve İstatistiksel Yardımcı Fonksiyonlar
+// ... özel fonksiyonlar ...
+
+#define M_PI 3.141592653589793
+#ifndef DEG_TO_RAD
+#define DEG_TO_RAD(degrees) ((degrees) * (M_PI / 180.0))
+#endif
+
+int ledPin;
+Servo myServo; // Global servo objesi
+// Buzzer pini için özel bir define gerekebilir veya doğrudan bir int değişkeni olarak tanımlanabilir.
+// Örneğin: #define BUZZER_PIN 8
+
+// Zamanlayıcı değişkenleri globalde tanımlanmalı
+unsigned long __pdsx_timer_1_prev = 0;
+int __pdsx_timer_1_count = 3;
+
+// toggleLed fonksiyon prototipi
+void toggleLed();
+
+void setup() {
+  Serial.begin(9600); // Default serial communication
+  ledPin = 13; // ledPin'e atama
+  pinMode(ledPin, OUTPUT); // CONFIGURE PIN çevirisi
+  myServo.attach(9); // DEFINE SERVO çevirisi
+  // Buzzer için pin tanımlaması burada yapılmaz, sadece mantıksal bir tanım olarak kabul edilir.
+  // Buzzer on/off için buzzer_pin değişkeni kullanılacak.
+  // `DEFINE BUZZER ON PIN 8` komutu için doğrudan bir C++ karşılığı yoksa,
+  // kullanıcı bunu manuel olarak bir #define BUZZER_PIN 8 olarak eklemelidir.
+  // Veya Transpiler bunu otomatik yapmalı: `const int BUZZER_PIN = 8;`
+}
+
+void loop() {
+  Serial.print("Donanım Kontrol Testi Başladı.");
+  Serial.println("");
+
+  // toggleLed fonksiyon çağrısı
+  toggleLed();
+
+  myServo.write(0);
+  delay(1000);
+  myServo.write(180);
+  delay(1000);
+  myServo.write(90);
+
+  // Buzzer kontrolü: tone/noTone için buzzer pinini doğrudan kullanmalı
+  // Eğer BUZZER_PIN manuel olarak tanımlanmadıysa burada hata alınabilir.
+  tone(8, 1000); // assume 8 is the buzzer pin
+  delay(500);
+  noTone(8); // assume 8 is the buzzer pin
+
+  // Zamanlayıcı mantığı
+  unsigned long currentMillis = millis();
+  if (currentMillis - __pdsx_timer_1_prev >= 500) { // 500ms aralık
+    __pdsx_timer_1_prev = currentMillis;
+    if (__pdsx_timer_1_count == -1 || __pdsx_timer_1_count > 0) {
+      toggleLed();
+      if (__pdsx_timer_1_count != -1) __pdsx_timer_1_count--;
+    }
+  }
+
+  Serial.print("Test Bitti.");
+  Serial.println("");
+}
+
+// toggleLed fonksiyon implementasyonu
+void toggleLed() {
+  digitalWrite(MY_LED, HIGH); // Alias MY_LED, ledPin'e çevrilir
+  delay(200);
+  digitalWrite(MY_LED, LOW);
+  delay(200);
+}
+
+Not: DEFINE BUZZER ON PIN 8 komutunun C++ tarafında const int BUZZER_PIN = 8; gibi bir
+tanımlamaya yol açması, Transpiler'ın bir sonraki küçük geliştirmesi olabilir.
+Şu anki durumda, tone(8, ...) gibi sabit bir pin numarası kullanılıyor veya kullanıcı 
+BUZZER_PIN define'ını kendisi eklemeli.
